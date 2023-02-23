@@ -1,0 +1,1 @@
+Simple REST service for images
