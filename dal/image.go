@@ -47,7 +47,7 @@ func (fs *FileService) GetAllFilesNames() ([]string, error) {
 }
 
 func (fs *FileService) DeleteFile(fileName string) error {
-	filePath := fs.config.App.ImageDirPath + fileName + ".jpg"
+	filePath := fs.config.App.ImageDirPath + fileName
 	err := os.Remove(filePath)
 	if err != nil {
 		return err

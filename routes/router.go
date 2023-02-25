@@ -8,14 +8,16 @@ import (
 )
 
 type Router struct {
-	dal dal.Dal
+	dal    dal.Dal
+	config config.Config
 }
 
 func NewRouter() *Router {
 	config := config.GetConfig()
 	fs := dal.NewFileService(config)
 	return &Router{
-		dal: fs,
+		dal:    fs,
+		config: *config,
 	}
 }
 
@@ -24,5 +26,7 @@ func InitRouter() *gin.Engine {
 	router := NewRouter()
 	engine.POST("/image", router.uploadImage)
 	engine.GET("/image", router.getAll)
+	engine.DELETE("/image/:fileName", router.delete)
+	engine.GET("/image/:fileName", router.download)
 	return engine
 }

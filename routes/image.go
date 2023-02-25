@@ -67,5 +67,18 @@ func (r *Router) getAll(c *gin.Context) {
 }
 
 func (r *Router) delete(c *gin.Context) {
+	fileName := c.Param("fileName")
+	err := r.dal.DeleteFile(fileName)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 
+	c.IndentedJSON(http.StatusOK, fileName+" deleted")
+}
+
+func (r *Router) download(c *gin.Context) {
+	fileName := c.Param("fileName")
+	filePath := r.config.App.ImageDirPath + fileName
+	c.File(filePath)
 }
