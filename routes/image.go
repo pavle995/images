@@ -1,9 +1,12 @@
 package routes
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"reflect"
+	"sort"
 
 	"github.com/pavle995/images/util"
 
@@ -29,6 +32,13 @@ func (r *Router) uploadImage(c *gin.Context) {
 	}
 	imgName := util.GetImageName(buffer)
 
+	// check if image exists
+	_, err = r.dal.GetFile(imgName)
+	if !errors.Is(err, os.ErrNotExist) {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	err = r.dal.StoreFile(buffer, imgName)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -42,5 +52,20 @@ func (r *Router) uploadImage(c *gin.Context) {
 	fmt.Printf("%v\n", file)
 	fmt.Println(reflect.TypeOf(file))
 	c.IndentedJSON(http.StatusCreated, "image name: "+imgName)
+
+}
+
+func (r *Router) getAll(c *gin.Context) {
+	imgNames, err := r.dal.GetAllFilesNames()
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	sort.Strings(imgNames)
+
+	c.IndentedJSON(http.StatusOK, imgNames)
+}
+
+func (r *Router) delete(c *gin.Context) {
 
 }
