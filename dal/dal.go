@@ -5,8 +5,8 @@ import (
 )
 
 type Dal interface {
-	StoreFile(buffer []byte, fileName string) error
-	GetFile(fileName string) ([]byte, error)
+	StoreFile(buffer []byte, fileName, extension string) error
+	GetFile(fileName, extension string) ([]byte, error)
 	GetAllFilesNames() ([]string, error)
 	DeleteFile(fileName string) error
 }

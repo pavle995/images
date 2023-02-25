@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-func (fs *FileService) StoreFile(buffer []byte, fileName string) error {
-	dst := fs.config.App.ImageDirPath + fileName + ".jpg"
+func (fs *FileService) StoreFile(buffer []byte, fileName, extension string) error {
+	dst := fs.config.App.ImageDirPath + fileName + extension
 
 	out, err := os.Create(dst)
 	if err != nil {
@@ -22,8 +22,8 @@ func (fs *FileService) StoreFile(buffer []byte, fileName string) error {
 	return nil
 }
 
-func (fs *FileService) GetFile(fileName string) ([]byte, error) {
-	filePath := fs.config.App.ImageDirPath + fileName + ".jpg"
+func (fs *FileService) GetFile(fileName, extension string) ([]byte, error) {
+	filePath := fs.config.App.ImageDirPath + fileName + extension
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err

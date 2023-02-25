@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"mime/multipart"
+	"path/filepath"
 )
 
 func GetImageName(buf []byte) string {
@@ -26,4 +27,8 @@ func ReadImage(file *multipart.FileHeader) ([]byte, error) {
 	src.Read(buf)
 
 	return buf, nil
+}
+
+func GetFileExtension(fileName string) string {
+	return filepath.Ext(fileName)
 }
