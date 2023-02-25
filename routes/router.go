@@ -9,21 +9,22 @@ import (
 
 type Router struct {
 	dal    dal.Dal
-	config config.Config
+	config *config.Config
 }
 
-func NewRouter() *Router {
-	config := config.GetConfig()
-	fs := dal.NewFileService(config)
+func NewRouter(dal dal.Dal, cfg *config.Config) *Router {
+
 	return &Router{
-		dal:    fs,
-		config: *config,
+		dal:    dal,
+		config: cfg,
 	}
 }
 
 func InitRouter() *gin.Engine {
 	engine := gin.Default()
-	router := NewRouter()
+	config := config.GetConfig()
+	fs := dal.NewFileService(config)
+	router := NewRouter(fs, config)
 	engine.POST("/image", router.uploadImage)
 	engine.GET("/image", router.getAll)
 	engine.DELETE("/image/:fileName", router.delete)

@@ -4,6 +4,7 @@ import (
 	"github.com/pavle995/images/config"
 )
 
+//go:generate mockery --name Dal
 type Dal interface {
 	StoreFile(buffer []byte, fileName, extension string) error
 	GetFile(fileName, extension string) ([]byte, error)

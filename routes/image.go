@@ -2,7 +2,6 @@ package routes
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"sort"
@@ -24,7 +23,6 @@ func (r *Router) uploadImage(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, "server failed to read data from file")
 		return
 	}
-	fmt.Println(buffer)
 	imgName := util.GetImageName(buffer)
 	ext := util.GetFileExtension(image.Filename)
 

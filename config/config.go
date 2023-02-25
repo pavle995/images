@@ -6,9 +6,9 @@ import (
 
 var config *Config
 
-func GetConfig() *Config {
+func GetConfig(test ...bool) *Config {
 	if config == nil {
-		err := loadConfig()
+		err := loadConfig(test...)
 		if err != nil {
 			panic(err)
 		}
@@ -25,11 +25,18 @@ type App struct {
 	ImageDirPath string `yaml:"imageDirPath"`
 }
 
-func loadConfig() error {
+func loadConfig(test ...bool) error {
 	viperInstance := viper.New()
-	viperInstance.SetConfigName("config")
+	var name string
+	if test != nil && test[0] {
+		name = "config_test"
+	} else {
+		name = "config"
+	}
+	viperInstance.SetConfigName(name)
 	viperInstance.SetConfigType("yaml")
 	viperInstance.AddConfigPath("./config/")
+	viperInstance.AddConfigPath("../config/")
 	viperInstance.AutomaticEnv()
 	err := viperInstance.ReadInConfig()
 	if err != nil {
